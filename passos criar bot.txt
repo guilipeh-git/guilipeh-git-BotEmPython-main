@@ -1,0 +1,126 @@
+1 - criar bot no bot father
+
+2 - cria pasta pro bot 
+
+3 - abre pasta no terminal power shell da o comando => npm init -y
+
+4 - da o camando => npm i --save telegraf@3.17.3 (i sig= install, eu setei a versao do telegraf pra nao ocasionar erros caso a versao mude)
+
+5 - no vs code cria um arquivo .env ; nesse arquivo coloca => const token = " coloca seu token"
+
+6 - nesse mesmo arquivo exporta uns modulos do js => digite : 
+module.exports = { 
+	token,
+	apiUrl: `https://api.telegram.org/bot${token}`,
+	apiFileUrl: `https://api.telegram.org/file/bot${token}`
+
+}
+
+api telegram --------
+
+7 - criar arquivo .js pro bot
+
+8 - nesse arquivo .js que criamos faz a chamada do arquivo env que criamos; => 
+const env = require('./.env') ex. env.token ele vai me mostra o token;
+
+9 - const Telegraf = require('telegraf') <= a forma que eu posso interagir com meu bot ; a forma deu me comunicar atraves dessa api;
+
+--- inicializar bot---
+
+10 - passa uma funcao construtora do telegraf ex: 
+const bot = new Telegraf(passando env.token);
+
+--------comecar a passa os comandos que meu bot vai fazer----------
+
+11 - bot.start() <= esse start esta  vindo da api do telegraf <= mesma funcao start do telegram
+dentro dessa funcao start vamos passa um parametro pra ela ;
+o parametro que sera passado sera uma funcao eron (ex funcao eron: content => {})
+Quando eu aperta start no bot essa funcao start sera executada;
+nessa funcao vamos passa pra ela  um => const from = content.update.menssage.from
+(o content e de onde eu puxo todas as informacoes do meu telegram pq passa tudo por ele; update puxa as atualizacoes de que ? da menssagem e tbm pega de onde esta vindo essa messagem)
+
+ex funcao start:
+bot.start(content => {
+    const from =  content.update.message.from;
+    console.log(from)
+
+    content.reply(`hello world senhor ${from.first_name}!`); // <= bot te responde
+})
+
+
+-------------bot responder esse usuario ----------
+
+é a funcao reply()
+
+
+na mesma funcao erron ainda eu passo
+content.reply()
+ex: content.reply(`ola ${from.first_name}!`) => to usando o from que eu criei a cima pra pega o nome do usuario
+
+
+
+--------bota bot pra roda starta -----------------
+
+bot.startPolling() <= essa funcao fica perguntando sempre pro servidor se existe alguma atualizacao pra ele ;
+
+-------- criando mais comandos pra entender a dinamica doc bot do telegram -----------------
+ tudo que for texto eu irei capturar
+
+bot.on('text',aqui eu passo um callback ou seja uma acao eron ) <= o "text"- ta pegando o texto;
+ex : obs: next e como se tivesse perguntando qual o proximo arquivo;
+bot.on('text',(content,next) => {
+	content.reply('moises');
+	next();
+})
+
+
+---------ver a mensagem que a pessoa mandou --------
+
+dentro dessa funcao que pega o texto  que eu crie coloca :
+
+console.log(content.update.menssage.text)
+
+
+
+=======================================================================================
+
+Modo Extra do telegraf cria um teclado um botao clicavel
+ex do Extra: const extra = require('telegraf/extra')
+ 
+ja o Markup me permite fazer as configuracoes inline desse meu teclado ;
+ex do Markup: const Markup = require("telegraf/markup") <= deixa os botoes bem legais;
+
+
+==============================================================================================
+criando botoes 
+o map transforma a lista e me permite passa uma funcao erron callback
+
+const button = () =>Extra.markup( 
+	Markup.inlinekeyboard( vou pega a lista que eu crei
+lista.map(item => Markup.callbackButton(item,` delete ${item}`)),
+{columns: 3}) <= criei os botoes que tem a unica funcao de delete e foi passado que seria em uma linha 3 botoes;
+
+)
+=================================================================================
+
+obs: o async define a order que os meus comandos serao executados
+no bot.start(async content => {
+	//capitura nome do cliente
+	const nome = content.update.message.from.first_name;
+
+	//return uma mensagem pro usuario um feedback
+	await content.reply(`seja bem vindo ${nome}`)
+	await content.reply(`digite os produtos que deseja adicionar ao carrinho`)
+})
+=================================================================================
+
+bot trabalha com texto : mapear os textos 
+
+bot.on("text", content => {
+	lista.push(content.update.message.text)
+	//return de feedback
+	content.reply(`${content.update.message.text} Produto adicionado com sucesso`, button() ) <= manda o feedback e chama a funcao button
+})
+
+=======================================================================================
+

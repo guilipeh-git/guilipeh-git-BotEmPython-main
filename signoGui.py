@@ -38,5 +38,5 @@ def signo(signoUser="sagitario"):
     return f"""Horóscopo do dia {data}{pl}{pl}{signoUser}{pl}{pl}{texto}"""
 
 
-
-#print(signo("LeÂ0o"))
+if __name__ == "__main__":
+    print(signo())

@@ -1,6 +1,10 @@
-import requests, json ,os ,signoGui
+import requests, json ,os ,signoGui,wikipediaGui
 import cotacaoMoedaGui as moeda
 from time import sleep
+
+
+
+
 
 [r,w,g,y] = ["\033[31m","\033[m","\033[32m","\033[33m"] # tabela de cor 
 
@@ -31,9 +35,16 @@ pl = os.linesep  # pula linha no telegram
 
 def menu():
     return f"""
+
+/CursoIngles - link do curso grátis de inglês\n
 /moeda - Cotação da moeda em tempo real \n
 /signo - digite seu signo  \n
+digite: /oquee e a palavra  que deseja pesquisar \n
+
             """
+
+
+
 
 while True:
     
@@ -69,7 +80,8 @@ while True:
             responderUsuario("matando terminal do bot ...")
             os.system("tskill powershell")    
         if msgTxt.find("/shutdown") != -1:
-            time = msgTxt.replace("/shutdown","")
+            time = msgTxt.replace("/shutdown","").strip()
+
             def msgfun(time): 
                 if (str(time).isnumeric()):
                     return "desligamento em andamento..."
@@ -80,8 +92,20 @@ while True:
         if msgTxt == "/cancelar":
             responderUsuario("desligamento cancelado...")
             os.system("shutdown -a")
+
+
+        if msgTxt.find("/oquee") != -1:
+            frase = msgTxt.replace("/oquee","")
+            if len(frase) == 0:
+                responderUsuario("campo invalido!!! digite: /oquee e a palavra(frase) que vc deseja pesquisar.")
+            else:
+                responderUsuario("aguarde só um momento ...")
+                responderUsuario(wikipediaGui.wikipedia(frase))
+
+        if msgTxt == "/cursoingles":
+            responderUsuario("https://kultivi.com/cursos/idiomas/ingles")
         responderUsuario(menu())
-        print(f"Mensagem Usuario = {msgTxt}")
+        print(f"Mensagem {idUsuario} = {msgTxt}")
 
     
     

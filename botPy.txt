@@ -1,0 +1,3 @@
+url que usa pra manda mensagem pro telegram
+
+https://api.telegram.org/bot2038005173:AAExoRyG-7yJiuB9EAzUuhau2v0thNMbLsY/sendMessage?chat_id=1280346366&text=pedro%20no%20meu%20ovo
